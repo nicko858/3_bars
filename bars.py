@@ -5,11 +5,8 @@ import sys
 def load_data(filepath):
     with open(filepath, 'r', encoding='utf-8') as source_file:
         source_data = source_file.read()
-    try:
         parsed_data = json.loads(source_data)
         return parsed_data
-    except ValueError:
-        return None
 
 
 def get_bar_by_size(parsed_data, size):
