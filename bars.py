@@ -24,10 +24,10 @@ def get_bar_by_size(parsed_data, size):
         return min(bar_size_dict, key=lambda seats_count: bar_size_dict[seats_count])
 
 
-def get_closest_bar(data, longitude, latitude):
+def get_closest_bar(parsed_data, longitude, latitude):
     bar_coords_dict = {}
     length_to_bar_dict = {}
-    for x in data['features']:
+    for x in parsed_data['features']:
         bar_name = x['properties']['Attributes']['Name']
         bar_coords = x['geometry']['coordinates']
         bar_coords_dict[bar_name] = bar_coords
@@ -56,20 +56,18 @@ if __name__ == '__main__':
     if check_is_or_less_null(longitude):
         print('Entering data is incorrect! The correct format is {}'.format(example_data))
         exit('Check the type of entering data! The {} is equal or less null! '.format(longitude))
-    else:
-        print('Your longitude is {} '.format(longitude))
-        print('Please enter your latitude:')
+    print('Your longitude is {} '.format(longitude))
+    print('Please enter your latitude:')
     latitude = float(input())
     if check_is_or_less_null(latitude):
         print('Entering data is incorrect! The correct format is {}'.format(example_data))
         exit('Check the type of entering data! The {} is equal or less null! '.format(latitude))
-    else:
-        print('Your latitude is {}'.format(latitude))
-        try:
-            json_content = load_data(sys.argv[1])
-            print('The largest bar - ', get_bar_by_size(json_content, 'biggest'))
-            print('The smallest bar - ', get_bar_by_size(json_content, 'smallest'))
-            print('The nearest bar - ', get_closest_bar(json_content, longitude, latitude))
-        except ValueError:
-            print('Decoding JSON has failed!')
-            exit('The source-file is not a valid JSON! Check the file content!')
+    print('Your latitude is {}'.format(latitude))
+    try:
+        json_content = load_data(sys.argv[1])
+        print('The largest bar - ', get_bar_by_size(json_content, 'biggest'))
+        print('The smallest bar - ', get_bar_by_size(json_content, 'smallest'))
+        print('The nearest bar - ', get_closest_bar(json_content, longitude, latitude))
+    except ValueError:
+        print('Decoding JSON has failed!')
+        exit('The source-file is not a valid JSON! Check the file content!')
