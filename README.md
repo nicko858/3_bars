@@ -49,8 +49,7 @@ If the content of source-file is not in JSON-format,  you will see the following
 ```The source-file is not a valid JSON! Check the file content!```
 Else if the entering data is incorrect(equal or less null), you will see the following:
 
-```Entering data is incorrect! The correct format is:
-longitude=37.621587946152012 latitude=55.765366956608361```
+```Entering data is incorrect! The correct format is: longitude=37.621587946152012 latitude=55.765366956608361```
 
 In the cases above, the program will not run.
 
