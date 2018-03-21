@@ -12,16 +12,16 @@ def load_data(filepath):
         return None
 
 
-def get_bar_by_size(data, size):
+def get_bar_by_size(parsed_data, size):
     bar_size_dict = {}
-    for x in data['features']:
+    for x in parsed_data['features']:
         bar_name = x['properties']['Attributes']['Name']
         bar_seats_count = x['properties']['Attributes']['SeatsCount']
         bar_size_dict[bar_name] = bar_seats_count
     if size == 'biggest':
-        return max(bar_size_dict, key=lambda SeatsCount: bar_size_dict[SeatsCount])
+        return max(bar_size_dict, key=lambda seats_count: bar_size_dict[seats_count])
     elif size == 'smallest':
-        return min(bar_size_dict, key=lambda SeatsCount: bar_size_dict[SeatsCount])
+        return min(bar_size_dict, key=lambda seats_count: bar_size_dict[seats_count])
 
 
 def get_closest_bar(data, longitude, latitude):
@@ -49,30 +49,27 @@ if __name__ == '__main__':
     script_usage = 'python bars.py  <path to file>'
     example_data = 'longitude=37.621587946152012 latitude=55.765366956608361'
     if len(sys.argv) != 2:
-        exit('Incorrect line argument!''\n' 'Using: %s' % script_usage)
-    try:
-        print('To find the nearest bar for you, you have to enter your coordinates.')
-        print('Please enter your longitude:')
-        longitude = float(input())
-        if check_is_or_less_null(longitude):
-            print('Check the type of entering data! The {} is equal or less null! '.format(longitude))
-            raise ValueError
-        else:
-            print('Your longitude is {} '.format(longitude))
-            print('Please enter your latitude:')
-        latitude = float(input())
-        if check_is_or_less_null(latitude):
-            print('Check the type of entering data! The {} is equal or less null! '.format(latitude))
-            raise ValueError
-        else:
-            print('Your latitude is {}'.format(latitude))
-            try:
-                json_content = load_data(sys.argv[1])
-                print('The largest bar - ', get_bar_by_size(json_content, 'biggest'))
-                print('The smallest bar - ', get_bar_by_size(json_content, 'smallest'))
-                print('The nearest bar - ', get_closest_bar(json_content, longitude, latitude))
-            except ValueError:
-                print('Decoding JSON has failed!')
-                exit('The source-file is not a valid JSON! Check the file content!')
-    except ValueError:
-        exit('Entering data is incorrect! The correct format is {}'.format(example_data))
+        exit('Incorrect line argument!''\n' 'Using: {}'.format(script_usage))
+    print('To find the nearest bar for you, you have to enter your coordinates.')
+    print('Please enter your longitude:')
+    longitude = float(input())
+    if check_is_or_less_null(longitude):
+        print('Entering data is incorrect! The correct format is {}'.format(example_data))
+        exit('Check the type of entering data! The {} is equal or less null! '.format(longitude))
+    else:
+        print('Your longitude is {} '.format(longitude))
+        print('Please enter your latitude:')
+    latitude = float(input())
+    if check_is_or_less_null(latitude):
+        print('Entering data is incorrect! The correct format is {}'.format(example_data))
+        exit('Check the type of entering data! The {} is equal or less null! '.format(latitude))
+    else:
+        print('Your latitude is {}'.format(latitude))
+        try:
+            json_content = load_data(sys.argv[1])
+            print('The largest bar - ', get_bar_by_size(json_content, 'biggest'))
+            print('The smallest bar - ', get_bar_by_size(json_content, 'smallest'))
+            print('The nearest bar - ', get_closest_bar(json_content, longitude, latitude))
+        except ValueError:
+            print('Decoding JSON has failed!')
+            exit('The source-file is not a valid JSON! Check the file content!')
