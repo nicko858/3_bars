@@ -1,22 +1,60 @@
-# Ближайшие бары
+# The Closest Bars
 
-[FIXME. Здесь будет описание проекта]
+The code reads a file with arbitrary data in JSON format and provides the following info:
+• the largest bar;
+• the smallest bar;
+• The closest bar (the current gps coordinates are entered by the user from the keyboard).
 
-# Как запустить
+# Quickstart
 
-Скрипт требует для своей работы установленного интерпретатора Python версии 3.5
+The program is represented by the module ```bars.py```.
+Module ```bars.py``` contains the following functions:
 
-Запуск на Linux:
+- ```load_data()``` - accepts the input to a file with arbitrary data in json format and reads the file content
+- ```get_bar_by_size()``` - accepts the file content  from the  ```load_data()``` function and returns the biggest bar, or the smallest bar, depending on the function arguments
+- ```get_closest_bar```- function accepts the file content  from the  ```load_data()``` function and returns the closest bar (using gps-coordinates entering by user)
 
-```bash
+The program uses these libs from Python Standart Library:
 
-$ python bars.py # possibly requires call of python3 executive instead of just python
-# FIXME вывести пример ответа скрипта
+```python
+import json
+import sys
 
 ```
 
-Запуск на Windows происходит аналогично.
+How in works:
+- The program reads  the first command-line argument(path to json-file)
+- loads it using  ```json.loads()``` -function
+- suggests user to enter the gps-coordinates
+- returns info about the biggest, smallest and closest bars using ```get_bar_by_size()``` , ```get_closest_bar```  functions
 
-# Цели проекта
+Example of script launch on Linux, Python 3.5:
 
-Код создан в учебных целях. В рамках учебного курса по веб-разработке - [DEVMAN.org](https://devman.org)
+```bash
+
+$ python bars.py <path to file>
+
+```
+in the console  output you will see something  like this:
+```bash
+The largest bar -  Спорт бар «Красная машина»
+The smallest bar -  Фреш-бар
+The nearest bar -  Юнион Джек
+```
+
+The program check command-line arguments and if it is wrong,  you will see the warning message ```Incorrect line argument!``` and usage-message.
+
+If the content of source-file is not in JSON-format,  you will see the following warning messages:
+```Decoding JSON has failed!```
+```The source-file is not a valid JSON! Check the file content!```
+Else if the entering data is incorrect(equal or less null), you will see the following:
+
+```Entering data is incorrect! The correct format is:
+longitude=37.621587946152012 latitude=55.765366956608361```
+
+In the cases above, the program will not run.
+
+
+# Project Goals
+
+The code is written for educational purposes. Training course for web-developers - [DEVMAN.org](https://devman.org)
