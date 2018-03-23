@@ -35,36 +35,49 @@ def get_closest_bar(parsed_data, longitude, latitude):
     return min(length_to_bar_dict, key=lambda length_to_bar: length_to_bar_dict[length_to_bar])
 
 
-def check_is_or_less_null(variable):
-    if variable <= 0:
-        return True
+def check_is_or_less_null(value):
+    if value <= 0:
+       return True
     else:
-        return False
+       return False
+
+
+def keyboard_input(value):
+    if value == 'longitude':
+        print('To find the nearest bar for you, you have to enter your coordinates.\nPlease enter your longitude:')
+        longitude = float(input())
+        return longitude
+    elif value == 'latitude':
+        print('Please enter your latitude:')
+        latitude = float(input())
+        return latitude
+
+
+def print_content(required, longitude=0.0, latitude=0.0):
+    if required == 'biggest':
+        print('The largest bar - ', get_bar_by_size(json_content, 'biggest'))
+    elif required == 'smallest':
+        print('The smallest bar - ', get_bar_by_size(json_content, 'smallest'))
+    elif required == 'closest':
+        print('The nearest bar - ', get_closest_bar(json_content, longitude, latitude))
 
 
 if __name__ == '__main__':
     script_usage = 'python bars.py  <path to file>'
     example_data = 'longitude=37.621587946152012 latitude=55.765366956608361'
     if len(sys.argv) != 2:
-        exit('Incorrect line argument!''\n' 'Using: {}'.format(script_usage))
-    print('To find the nearest bar for you, you have to enter your coordinates.')
-    print('Please enter your longitude:')
-    longitude = float(input())
-    if check_is_or_less_null(longitude):
-        print('Entering data is incorrect! The correct format is {}'.format(example_data))
-        exit('Check the type of entering data! The {} is equal or less null! '.format(longitude))
-    print('Your longitude is {} '.format(longitude))
-    print('Please enter your latitude:')
-    latitude = float(input())
-    if check_is_or_less_null(latitude):
-        print('Entering data is incorrect! The correct format is {}'.format(example_data))
-        exit('Check the type of entering data! The {} is equal or less null! '.format(latitude))
-    print('Your latitude is {}'.format(latitude))
+        exit('Incorrect line argument!\nUsing: {}'.format(script_usage))
+    longitude = keyboard_input('longitude')
+    latitude = keyboard_input('latitude')
+    for coord in (longitude, latitude):
+        if check_is_or_less_null(coord):
+            print('Entering data is incorrect! The correct format is {}'.format(example_data))
+            exit('Check the type of entering data! The {} is equal or less null! '.format(coord))
     try:
         json_content = load_data(sys.argv[1])
-        print('The largest bar - ', get_bar_by_size(json_content, 'biggest'))
-        print('The smallest bar - ', get_bar_by_size(json_content, 'smallest'))
-        print('The nearest bar - ', get_closest_bar(json_content, longitude, latitude))
     except ValueError:
         print('Decoding JSON has failed!')
         exit('The source-file is not a valid JSON! Check the file content!')
+    print_content('biggest')
+    print_content('smallest')
+    print_content('closest', longitude, latitude)
