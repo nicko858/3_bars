@@ -12,8 +12,9 @@ Module ```bars.py``` contains the following functions:
 
 - ```load_data()``` - accepts the input to a file with arbitrary data in json format and reads the file content
 - ```get_bar_by_size()``` - accepts the file content  from the  ```load_data()``` function and returns the biggest bar, or the smallest bar, depending on the function arguments
-- ```get_closest_bar```- function accepts the file content  from the  ```load_data()``` function and returns the closest bar (using gps-coordinates entering by user)
-
+- ```get_closest_bar()```- function accepts the file content  from the  ```load_data()``` function and returns the closest bar (using gps-coordinates entering by user)
+- ```keyboard_input()```-  function accepts the user keyboard input
+- ```print_content()``` - prints the biggest ,smallest and closest bar depending on the function arguments
 The program uses these libs from Python Standart Library:
 
 ```python
@@ -27,6 +28,7 @@ How in works:
 - loads it using  ```json.loads()``` -function
 - suggests user to enter the gps-coordinates
 - returns info about the biggest, smallest and closest bars using ```get_bar_by_size()``` , ```get_closest_bar```  functions
+and prints content using ```print_content()```-function
 
 Example of script launch on Linux, Python 3.5:
 

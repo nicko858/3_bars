@@ -42,12 +42,12 @@ def check_is_or_less_null(value):
        return False
 
 
-def keyboard_input(value):
-    if value == 'longitude':
+def keyboard_input(required):
+    if required == 'longitude':
         print('To find the nearest bar for you, you have to enter your coordinates.\nPlease enter your longitude:')
         longitude = float(input())
         return longitude
-    elif value == 'latitude':
+    elif required == 'latitude':
         print('Please enter your latitude:')
         latitude = float(input())
         return latitude
