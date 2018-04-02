@@ -1,5 +1,5 @@
 import json
-import sys
+import argparse
 
 
 def load_data(filepath):
@@ -50,19 +50,10 @@ def keyboard_input(input_value):
         print('To find the nearest bar for you, you have to enter your coordinates.\n'
               'Please enter your longitude:')
         longitude = float(input())
-        if check_is_or_less_null(longitude):
-            exit('Entering data is incorrect! The correct format is {}\n'
-                 'Check the type of entering data! '
-                 'The {} is equal or less null! '.format(example_data, longitude))
         return longitude
     elif input_value == 'latitude':
         print('Please enter your latitude:')
         latitude = float(input())
-        if check_is_or_less_null(latitude):
-            print()
-            exit('Entering data is incorrect! The correct format is {}\n'
-                 'Check the type of entering data! '
-                 'The {} is equal or less null! '.format(example_data, latitude))
         return latitude
 
 
@@ -75,18 +66,27 @@ def print_content(required, longitude=0.0, latitude=0.0):
         print('The nearest bar - ', get_closest_bar(json_content, longitude, latitude))
 
 
-if __name__ == '__main__':
+def arg_parser_init():
     script_usage = 'python bars.py  <path to file>'
+    parser = argparse.ArgumentParser(description="How to run bars.py:", usage=script_usage)
+    parser.add_argument("source_data", help="Specify the path to the source data file")
+    args = parser.parse_args()
+    return args
+
+
+if __name__ == '__main__':
     example_data = 'longitude=37.621587946152012 latitude=55.765366956608361'
-    if len(sys.argv) != 2:
-        exit('Incorrect line argument!\nUsing: {}'.format(script_usage))
     longitude = keyboard_input('longitude')
     latitude = keyboard_input('latitude')
+    for coord in (longitude, latitude):
+        if check_is_or_less_null(coord):
+            exit('Entering data is incorrect! The correct format is {}\n'
+                 'Check the type of entering data! '
+                 'The {} is equal or less null! '.format(example_data, coord))
     try:
-        json_content = load_data(sys.argv[1])
+        json_content = load_data(arg_parser_init().source_data)
     except ValueError:
         exit('Decoding JSON has failed!\n'
              'The source-file is not a valid JSON! Check the file content!')
-    print_content('biggest')
-    print_content('smallest')
-    print_content('closest', longitude, latitude)
+    for content in ('biggest', 'smallest', 'closest'):
+        print_content(content, longitude, latitude)
