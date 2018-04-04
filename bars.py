@@ -5,8 +5,12 @@ import argparse
 def load_data(filepath):
     with open(filepath, 'r', encoding='utf-8') as source_file:
         source_data = source_file.read()
-        parsed_data = json.loads(source_data)
-        return parsed_data
+        return source_data
+
+
+def get_json_content(data_to_parse):
+    parsed_data = json.loads(data_to_parse)
+    return parsed_data
 
 
 def get_bar_by_size(parsed_data, size):
@@ -38,55 +42,68 @@ def get_closest_bar(parsed_data, longitude, latitude):
                key=lambda length_to_bar: length_to_bar_dict[length_to_bar])
 
 
-def check_is_or_less_null(value_to_check):
-    if value_to_check <= 0:
-        return True
-    else:
-        return False
-
-
 def keyboard_input(input_value):
-    if input_value == 'longitude':
+    example_data = 'longitude=37.621587946152012 latitude=55.765366956608361'
+    value_error_message = ('Entering value is incorrect! '
+                           'The correct format is float: {}').format(example_data)
+    if input_value is 'longitude':
         print('To find the nearest bar for you, you have to enter your coordinates.\n'
               'Please enter your longitude:')
-        longitude = float(input())
-        return longitude
-    elif input_value == 'latitude':
+        while True:
+            try:
+                longitude = float(input())
+                return longitude
+            except ValueError:
+                print(value_error_message)
+                print('Please enter your longitude:')
+                continue
+    elif input_value is 'latitude':
         print('Please enter your latitude:')
-        latitude = float(input())
-        return latitude
+        while True:
+            try:
+                longitude = float(input())
+                return longitude
+            except ValueError:
+                print(value_error_message)
+                print('Please enter your latitude:')
+                continue
 
 
 def print_content(required, longitude=0.0, latitude=0.0):
-    if required == 'biggest':
+    if required is 'biggest':
         print('The largest bar - ', get_bar_by_size(json_content, 'biggest'))
-    elif required == 'smallest':
+    elif required is 'smallest':
         print('The smallest bar - ', get_bar_by_size(json_content, 'smallest'))
-    elif required == 'closest':
+    elif required is 'closest':
         print('The nearest bar - ', get_closest_bar(json_content, longitude, latitude))
 
 
-def arg_parser_init():
+def get_args():
     script_usage = 'python bars.py  <path to file>'
-    parser = argparse.ArgumentParser(description="How to run bars.py:", usage=script_usage)
-    parser.add_argument("source_data", help="Specify the path to the source data file")
+    parser = argparse.ArgumentParser(
+        description="How to run bars.py:",
+        usage=script_usage
+    )
+    parser.add_argument(
+        "source_data",
+        help="Specify the path to the source data file"
+    )
     args = parser.parse_args()
     return args
 
 
 if __name__ == '__main__':
     example_data = 'longitude=37.621587946152012 latitude=55.765366956608361'
+    args = get_args()
+    try:
+        file_to_load = load_data(args.source_data)
+    except IOError:
+        exit("No such file or directory {}".format(args.source_data))
+    try:
+        json_content = get_json_content(file_to_load)
+    except ValueError:
+        exit('The source-file is not a valid JSON or empty! Check the file content!')
     longitude = keyboard_input('longitude')
     latitude = keyboard_input('latitude')
-    for coord in (longitude, latitude):
-        if check_is_or_less_null(coord):
-            exit('Entering data is incorrect! The correct format is {}\n'
-                 'Check the type of entering data! '
-                 'The {} is equal or less null! '.format(example_data, coord))
-    try:
-        json_content = load_data(arg_parser_init().source_data)
-    except ValueError:
-        exit('Decoding JSON has failed!\n'
-             'The source-file is not a valid JSON! Check the file content!')
-    for content in ('biggest', 'smallest', 'closest'):
-        print_content(content, longitude, latitude)
+    for required_content in ['biggest', 'smallest', 'closest']:
+        print_content(required_content, longitude, latitude)
