@@ -68,12 +68,12 @@ def print_content(required, longitude=0.0, latitude=0.0):
 def get_args():
     script_usage = 'python bars.py  <path to file>'
     parser = argparse.ArgumentParser(
-        description="How to run bars.py:",
+        description='How to run bars.py:',
         usage=script_usage
     )
     parser.add_argument(
-        "source_data",
-        help="Specify the path to the source data file"
+        'source_data',
+        help='Specify the path to the source data file'
     )
     args = parser.parse_args()
     return args
@@ -81,7 +81,7 @@ def get_args():
 
 if __name__ == '__main__':
     args = get_args()
-    load_data_exit_message = "No such file or directory {}".format(args.source_data)
+    load_data_exit_message = 'No such file or directory {}'.format(args.source_data)
     get_json_content_exit_message = 'The source-file is not a valid JSON or empty! Check the file content!'
     example_data = 'longitude=37.621587946152012 latitude=55.765366956608361'
     error_dict = {
