@@ -21,7 +21,7 @@ The program uses these libs from Python Standart Library:
 
 ```python
 json
-sys
+argparse
 re
 sys
 ```
