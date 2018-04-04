@@ -10,7 +10,9 @@ The code reads a file with arbitrary data in JSON format and provides the follow
 The program is represented by the module ```bars.py```.
 Module ```bars.py``` contains the following functions:
 
-- ```load_data()``` - accepts the input to a file with arbitrary data in json format and reads the file content
+- ```load_data()``` - open input file to read
+- ```get_json_content() ``` - load file content in json-format
+- ```get_args()``` - parses script command-line arguments
 - ```get_bar_by_size()``` - accepts the file content  from the  ```load_data()``` function and returns the biggest bar, or the smallest bar, depending on the function arguments
 - ```get_closest_bar()```- function accepts the file content  from the  ```load_data()``` function and returns the closest bar (using gps-coordinates entering by user)
 - ```keyboard_input()```-  function accepts the user keyboard input
@@ -18,9 +20,10 @@ Module ```bars.py``` contains the following functions:
 The program uses these libs from Python Standart Library:
 
 ```python
-import json
-import sys
-
+json
+sys
+re
+sys
 ```
 
 How in works:
