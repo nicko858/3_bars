@@ -75,14 +75,13 @@ if __name__ == '__main__':
         json_content = load_data(args.source_data)['features']
         if json_content is None:
             exit('The source-file is not a valid JSON or empty! Check the file content!')
-    except IOError:
-        exit('No such file or directory {}'.format(args.source_data))
-    print('To find the nearest bar for you, enter your coordinates.\n'
-          'Please enter your longitude:')
-    try:
+        print('To find the nearest bar for you, enter your coordinates.\n'
+              'Please enter your longitude:')
         longitude = float(input())
         print('Please enter your latitude:')
         latitude = float(input())
+        print_content(json_content, longitude, latitude)
+    except IOError:
+        exit('No such file or directory {}'.format(args.source_data))
     except ValueError:
         exit('Entering value is incorrect! ''The correct format is float: {}'.format(example_data))
-    print_content(json_content, longitude, latitude)
