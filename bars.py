@@ -30,7 +30,7 @@ def get_length_to_bar(longitude, latitude, bar_longitude, bar_latitude):
     return length_to_bar
 
 
-def get_closest_bar(bars, longitude, latitude, name=False):
+def get_closest_bar(bars, longitude, latitude):
     bar = min(
         bars,
         key=lambda bar: get_length_to_bar(
