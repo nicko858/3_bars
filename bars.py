@@ -6,52 +6,53 @@ def load_data(filepath):
     with open(filepath, 'r', encoding='utf-8') as source_file:
         source_data = source_file.read()
     try:
-        parsed_data = json.loads(source_data)
-        return parsed_data
+        bars = json.loads(source_data)
+        return bars
     except ValueError:
         return None
 
 
-def get_smallest_bar(parsed_data):
-    biggest_bar_count = min(bar['properties']['Attributes']['SeatsCount']
-                            for bar in parsed_data)
-    for bar in parsed_data:
-        bar_name = bar['properties']['Attributes']['Name']
-        bar_seats_count = bar['properties']['Attributes']['SeatsCount']
-        if bar_seats_count == biggest_bar_count:
-            return bar_name
+def get_smallest_bar(bars):
+    bar = min(
+        bars,
+        key=lambda bar: bar['properties']['Attributes']['SeatsCount']
+    )
+    return bar
 
 
-def get_biggest_bar(parsed_data):
-    biggest_bar_count = max(bar['properties']['Attributes']['SeatsCount']
-                            for bar in parsed_data)
-    for bar in parsed_data:
-        bar_name = bar['properties']['Attributes']['Name']
-        bar_seats_count = bar['properties']['Attributes']['SeatsCount']
-        if bar_seats_count == biggest_bar_count:
-            return bar_name
+def get_biggest_bar(bars):
+    bar = max(bars, key=lambda bar: bar['properties']['Attributes']['SeatsCount'])
+    return bar
 
 
-def get_closest_bar(parsed_data, longitude, latitude):
+def get_length_to_bar(longitude, latitude, bar_longitude, bar_latitude):
+    length_to_bar = (longitude - bar_longitude) ** 2 + (latitude - bar_latitude) ** 2
+    return length_to_bar
 
-    def get_length_to_bar(longitude, latitude, bar_longitude, bar_latitude):
-        length_to_bar = (longitude - bar_longitude) ** 2 + (latitude - bar_latitude) ** 2
-        return length_to_bar
-    closest_bar_line = min(
-        parsed_data,
+
+def get_closest_bar(bars, longitude, latitude):
+    bar = min(
+        bars,
         key=lambda bar: get_length_to_bar(
             longitude,
             latitude,
             *bar['geometry']['coordinates']
         )
     )
-    return closest_bar_line['properties']['Attributes']['Name']
+    return bar
 
 
-def print_content(parsed_data, longitude, latitude):
-    print('The biggest bar -->', get_biggest_bar(parsed_data))
-    print('The smallest bar -->', get_smallest_bar(parsed_data))
-    print('The closest bar -->', get_closest_bar(parsed_data, longitude, latitude))
+def get_bar_name(bar):
+    return bar['properties']['Attributes']['Name']
+
+
+def get_bar_info(bars, required, longitude=0.0, latitude=0.0):
+    if required is 'biggest':
+        return get_biggest_bar(bars)
+    elif required is 'smallest':
+        return get_smallest_bar(bars)
+    elif required is 'closest':
+        return get_closest_bar(bars, longitude, latitude)
 
 
 def get_args():
@@ -68,20 +69,32 @@ def get_args():
     return args
 
 
+def keyboard_input():
+    try:
+        output_value = float(input())
+        return output_value
+    except ValueError:
+        return None
+
 if __name__ == '__main__':
     args = get_args()
     example_data = 'longitude=37.621587946152012 latitude=55.765366956608361'
     try:
-        json_content = load_data(args.source_data)['features']
-        if json_content is None:
+        bars = load_data(args.source_data)
+        if bars is None:
             exit('The source-file is not a valid JSON or empty! Check the file content!')
-        print('To find the nearest bar for you, enter your coordinates.\n'
-              'Please enter your longitude:')
-        longitude = float(input())
-        print('Please enter your latitude:')
-        latitude = float(input())
-        print_content(json_content, longitude, latitude)
-    except IOError:
+    except FileNotFoundError:
         exit('No such file or directory {}'.format(args.source_data))
-    except ValueError:
-        exit('Entering value is incorrect! ''The correct format is float: {}'.format(example_data))
+    print('To find the nearest bar for you, enter your coordinates.\n'
+          'Please enter your longitude:')
+    longitude = keyboard_input()
+    print('Please enter your latitude:')
+    latitude = keyboard_input()
+    if (longitude is None) or (latitude is None):
+        exit('Entering value is incorrect!\n'
+             'The correct format is float: {}'.format(example_data))
+    for required in ['biggest', 'smallest', 'closest']:
+        bar = get_bar_info(bars['features'], required, longitude, latitude)
+        bar_name = get_bar_name(bar)
+        print('The {} bar --> {}'.format(required, bar_name))
+

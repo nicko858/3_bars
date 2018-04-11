@@ -1,4 +1,5 @@
 
+
 # The Closest Bars
 
 The code reads a file with arbitrary data in JSON format and provides the following info:
@@ -15,6 +16,8 @@ Module ```bars.py``` contains the following functions:
 - ```get_json_content() ``` - load file content in json-format
 - ```get_args()``` - parses script command-line arguments
 - ```get_smallest_bar()``` - accepts the file content  from the  ```load_data()``` function and returns  the smallest bar(by seats count) 
+- ```keyboard_input()``` - accepts the user's keyboard-input and returns float value
+- ```get_bar_name``` - accepts the bar-string(json-line) and returns the bar name
 - ```get_biggest_bar``` accepts the file content  from the  ```load_data()``` function and returns  the biggest bar(by seats count) 
 - ```get_closest_bar()```- function accepts the file content  from the  ```load_data()``` function and returns the closest bar (using gps-coordinates entering by user)
 - ```print_content()``` - prints the biggest ,smallest and closest bar depending on the function arguments
@@ -62,4 +65,5 @@ In the cases above, the program will not run.
 # Project Goals
 
 The code is written for educational purposes. Training course for web-developers - [DEVMAN.org](https://devman.org)
+
 
