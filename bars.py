@@ -60,7 +60,7 @@ def get_args():
     return args
 
 
-def keyboard_input():
+def get_user_coordinates():
     print('To find the nearest bar for you, enter your coordinates.\n'
           'Please enter your longitude and latitude,separated by whitespace:')
     cord1, cord2 = input().split(' ')
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     args = get_args()
     try:
         json_content = load_data(args.source_data)
-        longitude, latitude = keyboard_input()
+        longitude, latitude = get_user_coordinates()
     except FileNotFoundError:
         exit('No such file or directory - {} !'.format(args.source_data))
     except json.JSONDecodeError:
